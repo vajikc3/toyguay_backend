@@ -1,0 +1,185 @@
+{
+	"id": "46ba49c1-0fb4-ecf9-f368-298dc8669b67",
+	"name": "nodepop",
+	"description": "",
+	"order": [
+		"25b5b610-71be-d951-fb93-93e4157b862f",
+		"7881f755-03f9-1b01-13ba-93b5e8233825",
+		"f17faa71-f1d6-24e2-5c6b-7d3c3ea3def4",
+		"ec79dade-1777-1c64-c080-01b33cc94f4c",
+		"db5f3912-1c10-7833-c6c5-caff3b6fe614"
+	],
+	"folders": [],
+	"timestamp": 1462222633023,
+	"owner": 0,
+	"remoteLink": "",
+	"public": false,
+	"requests": [
+		{
+			"id": "25b5b610-71be-d951-fb93-93e4157b862f",
+			"headers": "",
+			"url": "localhost:3000/api/v1/anuncios?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU3MjY3MTQwZGY0ODQ1NjcxMDliZTRmMSIsImlhdCI6MTQ2MjQ3MzE4OSwiZXhwIjoxNDYyNjQ1OTg5fQ.y-mr1nQSFvfzV-jeGySyTfBAdQApEfcnTXHSb6uoXRQ",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": [
+				{
+					"key": "importe",
+					"value": "200",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462553793640,
+			"name": "Anuncios",
+			"description": "lista_anuncios",
+			"collectionId": "46ba49c1-0fb4-ecf9-f368-298dc8669b67",
+			"responses": []
+		},
+		{
+			"id": "7881f755-03f9-1b01-13ba-93b5e8233825",
+			"headers": "",
+			"url": "localhost:3000/api/v1/usuarios/authenticate",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "usuario",
+					"value": "admin",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "admin",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "email",
+					"value": "admin@nodepop.es",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462553795984,
+			"name": "Usuarios",
+			"description": "lista_anuncios",
+			"collectionId": "46ba49c1-0fb4-ecf9-f368-298dc8669b67",
+			"responses": []
+		},
+		{
+			"id": "db5f3912-1c10-7833-c6c5-caff3b6fe614",
+			"headers": "",
+			"url": "localhost:3000/api/v1/tokens?lan=es&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU3MjY3MTQwZGY0ODQ1NjcxMDliZTRmMSIsImlhdCI6MTQ2MjQ3MzE4OSwiZXhwIjoxNDYyNjQ1OTg5fQ.y-mr1nQSFvfzV-jeGySyTfBAdQApEfcnTXHSb6uoXRQ",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "PUT",
+			"data": [
+				{
+					"key": "usuario",
+					"value": "admin",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "plataforma",
+					"value": "ios",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "",
+					"value": "",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462553801960,
+			"name": "token",
+			"description": "",
+			"collectionId": "46ba49c1-0fb4-ecf9-f368-298dc8669b67",
+			"responses": []
+		},
+		{
+			"id": "ec79dade-1777-1c64-c080-01b33cc94f4c",
+			"headers": "",
+			"url": "localhost:3000/images/anuncios/iphone.png?lan=es",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": [
+				{
+					"key": "importe",
+					"value": "200",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462553800016,
+			"name": "Imagenes",
+			"description": "",
+			"collectionId": "46ba49c1-0fb4-ecf9-f368-298dc8669b67",
+			"responses": []
+		},
+		{
+			"id": "f17faa71-f1d6-24e2-5c6b-7d3c3ea3def4",
+			"headers": "",
+			"url": "localhost:3000/api/v1/usuarios/register/",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "usuario",
+					"value": "ivan",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "email",
+					"value": "ivan@nodepop.es",
+					"type": "text",
+					"enabled": true
+				},
+				{
+					"key": "password",
+					"value": "hola",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "urlencoded",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1462553797872,
+			"name": "Usuario_registro",
+			"description": "",
+			"collectionId": "46ba49c1-0fb4-ecf9-f368-298dc8669b67",
+			"responses": []
+		}
+	]
+}

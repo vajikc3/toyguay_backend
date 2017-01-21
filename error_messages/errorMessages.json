@@ -1,0 +1,54 @@
+{
+  "USER_NOT_FOUND": {
+    "es": "Usuario no encontrado",
+    "en": "User not found"
+  },
+  "PAGE_NOT_FOUND":{
+    "es": "Página no encontrada",
+    "en": "Page not found"
+  },
+  "WRONG_QUERY":{
+    "es": "Patrón de búsqueda erróneo",
+    "en": "Wrong query format"
+  },
+  "NO_TOKEN_PROVIDED":{
+    "es": "No se envió Token",
+    "en": "No token provided"
+  },
+  "WRONG_AUTH_PARAMS":{
+    "es": "Parámetros de autentificación erróneos",
+    "en": "Wrong authentication parameters"
+  },
+  "USER_NOT_FOUND":{
+    "es": "Usuario no encontrado",
+    "en": "User not found"
+  },
+  "AUTH_FAILED":{
+    "es": "Error en autenticación",
+    "en": "Auth failed"
+  },
+  "USER_REGISTERED":{
+    "es": "El usuario ya está registrado",
+    "en": "User already registered"
+  },
+  "EMAIL_REGISTERED":{
+    "es": "El email ya está registrado",
+    "en": "Email is already registered"
+  },
+  "REGISTER_ERROR":{
+    "es": "Error instertando usuario en BBDD",
+    "en": "Error inserting user in BBDD"
+  },
+  "IMAGE_NOT_FOUND":{
+    "es": "La imagen requerida no existe",
+    "en": "The required image does not exist"
+  },
+  "WRONG_TOKEN_PARAMS":{
+    "es": "Error en los parámetros para incluir token-push",
+    "en": "Wrong token params for including token-push"
+  },
+  "PLATFORM_NOT_VALID":{
+    "es": "La plataforma elegida no es correcta",
+    "en": "The platform is not correct"
+  }
+}
