@@ -1,6 +1,3 @@
-/**
- * Created by icapa on 27/4/16.
- */
 'use strict';
 
 let mongoose = require ('mongoose');
@@ -10,7 +7,8 @@ let mongoose = require ('mongoose');
 let tokenSchema = mongoose.Schema({
     platform: {type: String, enum: ['ios','android']},
     token: String,
-    user: String
+    user: String,
+    createdAt: {type: Date, default: Date.now }
 });
 
 mongoose.model('Token',tokenSchema);

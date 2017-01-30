@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*___------===== Las rutas ====-------______*/
 
 app.use('/', require('./routes/index'));
-app.use('/api/v1/usuarios', require('./routes/api/v1/usuarios'));
+app.use('/api/v1/users', require('./routes/api/v1/users'));
 app.use('/api/v1/anuncios',require('./routes/api/v1/anuncios'));
 app.use('/images/anuncios',require('./routes/imagenes'));
 app.use('/api/v1/tokens',require('./routes/api/v1/tokens'));

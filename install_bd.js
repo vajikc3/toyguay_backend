@@ -1,6 +1,3 @@
-/**
- * Created by icapa on 24/4/16.
- */
 'use strict';
 
 let mongoose = require('mongoose');
@@ -65,7 +62,7 @@ User.remove({},function(err){
 });
 
 function rellenaBBDD(cb){
-    let user = new User({name: 'admin', email:'admin@nodepop.es',password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'});
+    let user = new User({first_name:'Vero', last_name:'Latigo', nick_name: 'admin', email:'admin@toyguay.es',password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'});
     let token = new Token({platform:'ios', user:'admin', token:'fake_token'});
     console.log('Filling bbdd with data...');
     user.save(function(err,reg){

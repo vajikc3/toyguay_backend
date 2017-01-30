@@ -36,8 +36,8 @@
     "en": "Email is already registered"
   },
   "REGISTER_ERROR":{
-    "es": "Error instertando usuario en BBDD",
-    "en": "Error inserting user in BBDD"
+    "es": "Error, el usuario ya está registrado",
+    "en": "Error, user already registered"
   },
   "IMAGE_NOT_FOUND":{
     "es": "La imagen requerida no existe",
@@ -50,5 +50,9 @@
   "PLATFORM_NOT_VALID":{
     "es": "La plataforma elegida no es correcta",
     "en": "The platform is not correct"
+  },
+  "PASSWORDS_NOT_MATCH":{
+    "es": "Los passwords no coinciden",
+    "en": "Passwords don't match"
   }
 }
