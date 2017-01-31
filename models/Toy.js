@@ -7,14 +7,18 @@ let util = require('util');
 
 let mongoose = require ('mongoose');
 
+
 // Add schema
 
 let adSchema = mongoose.Schema({
-    nombre: String,
-    venta: Boolean,  // True si es una venta, False si es búsqueda
-    precio: Number,
-    foto: String,
-    tags: [String]
+    name: {type: String, required: true},
+    description: {type: String, required: true},
+    state: {type: String, required: true, default:0},
+    price: {type: Number, required: true },
+    seller: {type: mongoose.Schema.ObjectId, ref: 'User'},
+    imageURL : {type: String, required:false},
+    createdAt : {type: Date, required:true, default: Date.now()},
+    updatedAt: {type: Date, required: true, default: Date.now()}
 });
 
 adSchema.statics.list = function(filter,start,limit,sort,cb){
@@ -65,4 +69,4 @@ adSchema.statics.precioAFiltro = function(precio){
 
 };
 
-let Ad = mongoose.model('Ad',adSchema);
+let Ad = mongoose.model('Toy',adSchema);

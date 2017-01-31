@@ -1,9 +1,9 @@
 {
-  "name": "nodepop",
+  "name": "toyguay",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=nodepop:* PORT=3000 nodemon ./bin/www",
+    "start": "DEBUG=toyguay:* PORT=3000 nodemon ./bin/www",
     "installBD": "node install_bd"
   },
   "dependencies": {

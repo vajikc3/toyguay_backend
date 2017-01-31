@@ -11,11 +11,12 @@ let translator = require ('../../../lib/translator');
 let jwtAuth = require('../../../lib/jwtAuth');
 
 
-let Ad = mongoose.model('Ad');
+let Toy = mongoose.model('Toy');
 
 //-- Requerimos autentificacion para todo
 
-router.use(jwtAuth());
+/* Esto hay que ponerlo cuando se necesite autorizacion */
+//router.use(jwtAuth());
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -39,13 +40,13 @@ router.get('/', function(req, res) {
         //console.log('Criterio de nombre ->',criteria.name);
     }
     if (typeof tag !== 'undefined'){
-        criteria.tags = Ad.tagsAFiltro(tag);
+        criteria.tags = Toy.tagsAFiltro(tag);
     }
     if (typeof venta !== 'undefined'){
         criteria.venta=venta;
     }
     if (typeof precio !== 'undefined'){
-        criteria.precio = Ad.precioAFiltro(precio);
+        criteria.precio = Toy.precioAFiltro(precio);
     }
     if (typeof venta !== 'undefined'){
         if (venta==='true'){
@@ -56,9 +57,9 @@ router.get('/', function(req, res) {
         }
     }
 
-    //console.log('Criteria ->',criteria);
+    console.log('Criteria Toys ->',criteria);
 
-    Ad.list(criteria,start,limit,sort,function(err,rows) {
+    Toy.list(criteria,start,limit,sort,function(err,rows) {
         if (err) {
             return res.json({sucess: false, error: translator('WRONG_QUERY',idioma)});
         }

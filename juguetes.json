@@ -1,0 +1,16 @@
+{
+  "juguetes":
+  [ {
+    "name": ,
+    "description": ,
+    "state": ,
+    "price": ,
+    "seller": ,
+    "imageURL": ,
+    "createdAt": ,
+    "updatedAt":
+  }, {
+
+  }
+  ]
+}

@@ -14,7 +14,7 @@ var app = express();
 require('./lib/connectMongoose');
 
 // Los modelos
-require('./models/Ad'); // Modelo de anuncios
+require('./models/Toy'); // Modelo de anuncios
 require('./models/User');
 require('./models/Token');
 
@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/index'));
 app.use('/api/v1/users', require('./routes/api/v1/users'));
-app.use('/api/v1/anuncios',require('./routes/api/v1/anuncios'));
+app.use('/api/v1/toys',require('./routes/api/v1/toys'));
 app.use('/images/anuncios',require('./routes/imagenes'));
 app.use('/api/v1/tokens',require('./routes/api/v1/tokens'));
 
