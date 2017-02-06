@@ -24,7 +24,7 @@ let userSchema = mongoose.Schema({
 userSchema.index({'email':1},{ unique: true});
 userSchema.index({'nick_name':1},{ unique: true});
 
-userSchema.statics.buscaUsuarioEmail = function(usuario,email,callback){
+userSchema.statics.findUserOrMail = function(usuario, email, callback){
     async.parallel({
         userFind: function(cb){
             User.findOne({nick_name: usuario},function(err,user){
@@ -66,6 +66,38 @@ userSchema.statics.buscaUsuarioEmail = function(usuario,email,callback){
             callback(err,found_user);
         }
     );
+};
+
+userSchema.statics.validateUserName = function(user){
+    var regularExpression = /^[a-zA-Z0-9_@.-]{1,30}$/;
+    if (!regularExpression.test(user)){
+        return false;
+    }
+    else {
+        return true;
+    }
+};
+
+userSchema.statics.validateEmail = function(email){
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    //var regularExpression = /^(?=.*[.@])[a-zA-Z0-9_.-]{3,40}/;
+    if (!re.test(email)){
+        return false;
+    }
+    else {
+        return true;
+    }
+};
+
+userSchema.statics.validatePassword = function(password){
+    var regularExpression = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d#?!@$%^&*-]{6,50}$/;
+    if (!regularExpression.test(password)){
+        return false;
+    }
+    else{
+        return true;
+    }
+    return true;
 };
 
 let User =  mongoose.model('User',userSchema);

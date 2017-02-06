@@ -74,7 +74,7 @@ router.post('/register',function(req,res){
 
 
     /*
-    User.buscaUsuarioEmail(name,email,function(err,data){
+    User.findUserOrMail(name,email,function(err,data){
         if (err){
             res.json({sucess:false, error:translator('WRONG_AUTH_PARAMS',idioma)});
             return;
@@ -129,7 +129,7 @@ router.post('/authenticate', function(req, res) {
 
     console.log('Busco nombre o usuario e idioma',email,name,idioma);
 
-    User.buscaUsuarioEmail(name,email,function(err,user){
+    User.findUserOrMail(name,email,function(err, user){
         if (err){
             return res.status(500).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',idioma)});
         }
