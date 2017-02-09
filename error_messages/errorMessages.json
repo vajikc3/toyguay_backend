@@ -54,5 +54,21 @@
   "PASSWORDS_NOT_MATCH":{
     "es": "Los passwords no coinciden",
     "en": "Passwords don't match"
+  },
+  "INVALID_USER_NAME":{
+    "es": "Nombre de usuario incorrecto",
+    "en": "Invalid user name"
+  },
+  "INVALID_EMAIL":{
+    "es": "Correo electrónico incorrecto",
+    "en": "Invalid email"
+  },
+  "INVALID_PASSWORD":{
+    "es": "Password incorrecto, use mayúsculas, minúsculas y un dígito",
+    "en": "Invalid password, capital letter, lower case and a number "
+  },
+  "FORBIDDEN":{
+    "es": "Operación no permitida",
+    "en": "Operation not allowed"
   }
 }

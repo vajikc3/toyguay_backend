@@ -4,6 +4,7 @@
 
 'use strict';
 let jwt = require('jsonwebtoken');
+let jwtAuth = require('../../../lib/jwtAuth');
 
 let config = require('../../../local_config');
 
@@ -37,17 +38,27 @@ router.post('/register',function(req,res){
     let state = req.body.state;
 
 
-    let idioma = req.body.lan || req.query.lan  || 'es';
+    let lan = req.body.lan || req.query.lan  || 'es';
     let hashPas='';
 
     const crypto = require('crypto');
     const hash = crypto.createHash('sha256');
 
     if (password != password_repeat){
-        return res.json({sucess: false, error:translator('PASSWORDS_NOT_MATCH',idioma)});
+        return res.status(400).json({sucess: false, error:translator('PASSWORDS_NOT_MATCH',lan)});
     }
 
     hashPas = hash.update(password).digest('hex');
+
+    if (User.validateUserName(nick_name)==false){
+        return res.status(400).json({sucess:false,error:translator('INVALID_USER_NAME',lan)});
+    }
+    if (User.validateEmail(email)==false){
+        return res.status(400).json({sucess:false,error:translator('INVALID_EMAIL',lan)});
+    }
+    if (User.validatePassword(password)==false){
+        return res.status(400).json({sucess:false,error:translator('INVALID_PASSWORD',lan)});
+    }
 
     let usuario = new User(
         {
@@ -63,53 +74,18 @@ router.post('/register',function(req,res){
         }
     );
 
+
     usuario.save(function(err,saved){
         if (err){
             console.log('Error insertando usuario ->', err);
-            return res.json({sucess: false, error:translator('REGISTER_ERROR',idioma)});
+            return res.status(400).json({sucess: false, error:translator('REGISTER_ERROR',idioma)});
         }
-        return res.json({sucess: true, saved: saved});
+        return res.status(201).json({sucess: true, saved: saved});
 
     });
 
 
-    /*
-    User.findUserOrMail(name,email,function(err,data){
-        if (err){
-            res.json({sucess:false, error:translator('WRONG_AUTH_PARAMS',idioma)});
-            return;
-        }
-        if (data[0]===true){
-            res.json({sucess:false, error:translator('USER_REGISTERED',idioma)});
-            return;
-        }
-        if (data[1]===true){
-            res.json({sucess: false, error:translator('EMAIL_REGISTERED',idioma)});
-            return;
-        }
-        //-- Si no podemos insertar el registro
 
-        // Aqui damos de alta
-        const crypto = require('crypto');
-        const hash = crypto.createHash('sha256');
-
-        hashPas = hash.update(password).digest('hex');
-
-        let usuario = new User({name: name,email: email,password: hashPas});
-
-        usuario.save(function(err,saved){
-            if (err){
-                return res.json({sucess: false, error:translator('REGISTER_ERROR',idioma)});
-            }
-            return res.json({sucess: true, saved: saved});
-
-
-        });
-
-
-
-    });
-    */
 
 });
 
@@ -123,18 +99,18 @@ router.post('/authenticate', function(req, res) {
     let name = req.body.user;
     let password = req.body.password;
     let email = req.body.email;
-    let idioma = req.body.lan || req.query.lan  || 'es';
+    let lan = req.body.lan || req.query.lan  || 'es';
     let passHaseado='';
 
 
-    console.log('Busco nombre o usuario e idioma',email,name,idioma);
+    console.log('Busco nombre o usuario e idioma',email,name,lan);
 
     User.findUserOrMail(name,email,function(err, user){
         if (err){
-            return res.status(500).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',idioma)});
+            return res.status(500).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',lan)});
         }
         if (!user){
-            return res.status(401).json({sucess: false, error: translator('USER_NOT_FOUND',idioma)});
+            return res.status(401).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
         }
 
 
@@ -144,40 +120,91 @@ router.post('/authenticate', function(req, res) {
         passHaseado = hash.update(password).digest('hex');
         console.log('Hash pedido hasheado:',passHaseado);
         if (passHaseado !== user.password){
-            return res.status(401).json({sucess: false, error: translator('AUTH_FAILED',idioma)});
+            return res.status(401).json({sucess: false, error: translator('AUTH_FAILED',lan)});
         }
         let token = jwt.sign({id: user._id},config.jwt.secret,{
-            expiresIn: '2 days'
+            expiresIn: '24h'
         });
 
-        res.json({sucess: true, token: token});
+        return res.status(200).json({sucess: true, token: token});
     });
-    /*
-    // Podemos hacer que autorice con usuario y contraseña
-    User.findOne({nick_name: name, email:email}).exec(function(err,user){
-        console.log('Esto hemos encontrado: ', user, err);
-        if (err){
-            return res.status(500).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',idioma)});
-        }
-        if (!user){
-            return res.status(401).json({sucess: false, error: translator('USER_NOT_FOUND',idioma)});
-        }
-        const crypto = require('crypto');
-        const hash = crypto.createHash('sha256');
-
-        passHaseado = hash.update(password).digest('hex');
-        console.log('Hash pedido hasheado:',passHaseado);
-        if (passHaseado !== user.password){
-            return res.status(401).json({sucess: false, error: translator('AUTH_FAILED',idioma)});
-        }
-        let token = jwt.sign({id: user._id},config.jwt.secret,{
-            expiresIn: '2 days'
-        });
-
-        res.json({sucess: true, token: token});
-    });
-    */
 });
 
-    
+
+
+router.post('/recover',function(req,res){
+    let user = req.body.user;
+    let email = req.body.email;
+    let lan = req.body.lan || req.query.lan  || 'es';
+
+    console.log('Recuperando contraseña ',user, email);
+    // Try to find user
+    User.findUserOrMail(user,email,function(err, user){
+        if (err){
+            return res.status(400).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',lan)});
+        }
+        if (!user){
+            return res.status(400).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
+        }
+        return res.status(200).json({sucess: true, error: 'Enviando emil a: '+user.email});
+
+    });
+
+});
+
+
+
+/* Endpoints that required auth */
+router.use(jwtAuth());
+
+router.delete('/:userid',function(req,res){
+    console.log('Borrando usuario ->', req.params.userid);
+    let lan = req.body.lan || req.query.lan  || 'es';
+    let token = req.query.token;
+    console.log('Decodificando ->', token);
+
+    // First check if userid is active
+    User.findOne({_id: req.params.userid},function(err,user){
+        if (err){
+            return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
+        }else{
+            if (!user){
+                return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
+            }
+
+            try {
+                var decoded= jwt.verify(token, config.jwt.secret);
+                console.log('Decodificando token usuario->', decoded.id);
+                console.log('Comprobando usuario ');
+                if (decoded.id != req.params.userid){
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+                console.log('Usuario correcto para borrar');
+                // Test decoded data is the user
+            }catch(err){
+                console.log('Decodificando token ERROR');
+                return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+            }
+
+
+
+            User.remove({_id: req.params.userid }, function(err,user){
+                if (err){
+                    return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)})
+                }else{
+                    console.log('Borrando ->',user.result);
+                    return res.status(204).json({sucess: true});
+                }
+            });
+
+        }
+    });
+
+
+
+
+});
+
+
+
 module.exports = router;
