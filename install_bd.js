@@ -14,7 +14,21 @@ let User = require('mongoose').model('User');
 let Toy = require('mongoose').model('Toy');
 let Token = require('mongoose').model('Token');
 
-let user = new User({first_name:'Bardal', last_name:'Bardal', nick_name: 'bardal', email:'bardal@toyguay.es',password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'});
+let user = new User({first_name:'Bardal',
+    last_name:'Bardal',
+    nick_name: 'bardal',
+    email:'bardal@toyguay.es',
+    location:{
+        type: 'Point',
+        coordinates: [43.4565, 3.8765]
+    },
+    password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'
+});
+
+
+
+
+
 let token = new Token({platform:'ios', user:'admin', token:'fake_token'});
 let juguete1 = new Toy({
     name: 'Pelota' ,

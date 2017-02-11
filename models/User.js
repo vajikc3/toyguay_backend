@@ -14,8 +14,11 @@ let userSchema = mongoose.Schema({
     email: {type: String, required: true, unique:true},
     nick_name: {type: String, required: true, unique:true},
     password: {type: String, required: true},
-    latitude:{type: Number, required: false },
-    longitude:{type: Number, required: false },
+    location: {
+        type: { String },
+        coordinates:  [Number],
+        required: false
+    },
     state: {type: Number, required:false},
     imageURL : {type: String, required:false}
 
@@ -23,6 +26,8 @@ let userSchema = mongoose.Schema({
 
 userSchema.index({'email':1},{ unique: true});
 userSchema.index({'nick_name':1},{ unique: true});
+userSchema.index({location: '2dsphere'});
+
 
 userSchema.statics.findUserOrMail = function(usuario, email, callback){
     async.parallel({

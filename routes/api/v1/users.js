@@ -67,8 +67,12 @@ router.post('/register',function(req,res){
             email: email,
             nick_name: nick_name,
             password: hashPas,
-            latitude: latitude,
-            longitude: longitude,
+            location: {
+                $geometry : {
+                    type: 'Point',
+                    coordinates : [latitude,longitude]
+                }
+            },
             state: state,
             imageURL: imageURL
         }
