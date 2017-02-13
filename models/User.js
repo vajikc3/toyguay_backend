@@ -19,8 +19,12 @@ let userSchema = mongoose.Schema({
         coordinates:  [Number],
         required: false
     },
-    state: {type: Number, required:false},
-    imageURL : {type: String, required:false}
+    city: {type: String, required: true},
+    province: {type: String, required: true},
+    country: {type: String, required: true},
+    state: {type: Number, required: false},
+    imageURL : {type: String, required:false},
+    admin: {type: Boolean, required: false, default: false}
 
 });
 

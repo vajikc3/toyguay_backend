@@ -16,7 +16,8 @@ let adSchema = mongoose.Schema({
     state: {type: String, required: true, default:0},
     price: {type: Number, required: true },
     seller: {type: mongoose.Schema.ObjectId, ref: 'User'},
-    imageURL : {type: String, required:false},
+    imageURL : {type: [String], required:false},
+    categories: {type: [String], required:false},
     createdAt : {type: Date, required:true, default: Date.now()},
     updatedAt: {type: Date, required: true, default: Date.now()}
 });

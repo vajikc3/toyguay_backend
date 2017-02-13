@@ -20,38 +20,60 @@ let user = new User({first_name:'Bardal',
     email:'bardal@toyguay.es',
     location:{
         type: 'Point',
-        coordinates: [43.4565, 3.8765]
+        coordinates: [43.4722475, -3.8199358]
     },
-    password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918'
+    province: 'Cantabria',
+    city: 'Parbayón',
+    country: 'España',
+    password: '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+    admin: true
 });
-
-
 
 
 
 let token = new Token({platform:'ios', user:'admin', token:'fake_token'});
+
+
+
 let juguete1 = new Toy({
-    name: 'Pelota' ,
+    name: 'Pelota',
     description: 'Balón de fútbol',
-    state: 'Nuevo',
+    state: 'Selling',
     price: '5.5',
     seller: user._id,
-    imageURL: 'https://i.ytimg.com/vi/QqwxNpQObJ8/maxresdefault.jpg',
-    createdAt: Date.now(),
-    updatedAt: Date.now()}
-);
+    categories: ['sports', 'street'],
+    imageURL: ['https://i.ytimg.com/vi/QqwxNpQObJ8/maxresdefault.jpg']
+});
 
 let juguete2 = new Toy({
     name: 'Muñeca' ,
     description: 'Muy rara y muy bien vestida',
-    state: 'Usada',
+    state: 'Selling',
     price: "0.0",
     seller: user._id,
-    imageURL: 'http://mkz.tkzstatic.com/images/productos/muneca-clara_961_full.jpg',
-    createdAt: Date.now(),
-    updatedAt: Date.now()
-});
+    categories: ['dolls', 'home'],
+    imageURL: ['http://mkz.tkzstatic.com/images/productos/muneca-clara_961_full.jpg']
 
+});
+let juguete3 = new Toy({
+    name: 'Lego' ,
+    description: 'Ciudad de lego',
+    state: 'Selling',
+    price: "10.0",
+    seller: user._id,
+    categories: ['kids', 'construction' ],
+    imageURL: ['https://lc-www-live-s.legocdn.com/r/www/r/city/-/media/franchises/city2014/products/themes/town.jpg']
+
+});
+let juguete4 = new Toy({
+    name: 'Playmobil' ,
+    description: 'Barco Pirata',
+    state: 'Selling',
+    price: "50.0",
+    seller: user._id,
+    categories: ['kids','home','playmobil'],
+    imageURL: ['http://www.klickypedia.com/wp-content/uploads/2015/01/3050us-pirate-ship-box-00.jpg']
+});
 
 // Script para cargar la base de datos
 
@@ -139,23 +161,43 @@ function rellenaJuguetes(cb){
 */
 function rellenaJuguetes(cb){
 
-    juguete1.save(function (err,reg){
-        if (err){
-            console.log('Error juguete 1 !!! ',err);
-            cb(err);
+    juguete1.save(function (err,reg) {
+        if (err) {
+            console.log('Error juguete 1 !!! ', err);
             return;
         }
+        console.log('Insertado juguete')
         juguete2.save(function(err,req){
-           if (err){
-               console.log('Error juguete 2 !!!' , err);
-               cb(err);
-               return;
-           }
-           cb(null);
-           console.log('Insertados juguetes -> OK');
+            if (err){
+                console.log('Error juguete 2 !!!' , err);
+                cb(err);
+                return;
+            }
+            console.log('Insertado juguete');
+            juguete3.save(function(err,req){
+                if (err){
+                    console.log('Error juguete 2 !!!' , err);
+                    cb(err);
+                    return;
+                }
+                console.log('Insertado juguete');
+                juguete4.save(function(err,req){
+                    if (err){
+                        console.log('Error juguete 2 !!!' , err);
+                        cb(err);
+                        return;
+                    }
+                    console.log('Insertado juguete');
+                    cb();
+                });
+            });
         });
 
     });
+
+
+
+
 
 }
 

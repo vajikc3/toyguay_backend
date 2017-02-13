@@ -159,56 +159,203 @@ router.post('/recover',function(req,res){
 
 
 /* Endpoints that required auth */
+/* LO QuITO PARA PROBAR LA API HAY Q PONERLO
 router.use(jwtAuth());
+TODO */
 
 router.delete('/:userid',function(req,res){
     console.log('Borrando usuario ->', req.params.userid);
     let lan = req.body.lan || req.query.lan  || 'es';
     let token = req.query.token;
+    let decoded='';
+    try {
+        decoded = jwt.verify(token, config.jwt.secret);
+    }catch(err){
+        return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+    }
+    console.log('Decodificando token usuario->', decoded.id);
+    console.log('Comprobando usuario ');
     console.log('Decodificando ->', token);
 
-    // First check if userid is active
-    User.findOne({_id: req.params.userid},function(err,user){
+    User.findOne({_id: decoded.id}, function(err,user){
         if (err){
             return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
-        }else{
-            if (!user){
-                return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
+        }
+        // Look for the user who made de query
+        if (user){
+            if (user.admin == true){
+                // If the user is admin can delete any user
+                User.remove({_id: req.params.userid }, function(err,user){
+                    if (err){
+                        return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)})
+                    }else{
+                        console.log('Borrando ->',user.result);
+                        return res.status(204).json({sucess: true});
+                    }
+                });
             }
+            else{
+                User.findOne({_id: req.params.userid},function(err,user){
+                    if (err){
+                        return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
+                    }else{
+                        if (!user){
+                            return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
+                        }
 
-            try {
-                var decoded= jwt.verify(token, config.jwt.secret);
-                console.log('Decodificando token usuario->', decoded.id);
-                console.log('Comprobando usuario ');
-                if (decoded.id != req.params.userid){
-                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                        if (decoded.id != req.params.userid){
+                            return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                        }
+                        console.log('Usuario correcto para borrar');
+                        // Test decoded data is the user
+
+
+
+
+                        User.remove({_id: req.params.userid }, function(err,user){
+                            if (err){
+                                return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)})
+                            }else{
+                                console.log('Borrando ->',user.result);
+                                return res.status(204).json({sucess: true});
+                            }
+                        });
+
+                    }
+                });
+            }
+        }
+
+    });
+});
+
+
+router.put('/:userid',function(req,res) {
+    let user=req.params.userid;
+    let lan = req.body.lan || req.query.lan  || 'es';
+
+    let first_name = req.body.first_name || null;
+    let last_name = req.body.last_name || null;
+    let email = req.body.email || null;
+
+
+    let latitude = req.body.latitude || null;
+    let longitude = req.body.longitude || null;
+    let imageURL = req.body.imageURL || null;
+
+    let city = req.body.city || null;
+    let province = req.body.province || null;
+    let country = req.body.country || null;
+
+
+    console.log('Actualizando usuario ->',req.params.userid);
+    User.findOne({_id: user},function(err,user){
+        if (err){
+            return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)});
+        }
+        if (!user){
+            return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)});
+        }
+        else{
+
+            if (first_name){
+                user.first_name = first_name;
+            }
+            if (last_name){
+                user.last_name = last_name;
+            }
+            if (email){
+                if (User.validateEmail(email)){
+                    user.email = email
                 }
-                console.log('Usuario correcto para borrar');
-                // Test decoded data is the user
-            }catch(err){
-                console.log('Decodificando token ERROR');
-                return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                else{
+                    return res.status(400).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',lan)});
+                }
+            }
+            if (latitude && longitude){
+                user.location.coordinates = [latitude, longitude];
+            }
+            if (imageURL){
+                user.imageURL = imageURL;
             }
 
+            if (city){
+                user.city = city;
+            }
+            if (province){
+                user.province = province;
+            }
+            if (country){
+                user.country = country;
+            }
 
-
-            User.remove({_id: req.params.userid }, function(err,user){
+            user.save(function(err,saved){
                 if (err){
-                    return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)})
-                }else{
-                    console.log('Borrando ->',user.result);
-                    return res.status(204).json({sucess: true});
+                    return res.status(400).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',lan)});
+                }
+                else{
+                    return res.status(200).json({sucess : true});
                 }
             });
 
         }
     });
 
-
-
-
 });
 
+router.put('/password/:userid',function(req,res) {
+    let passHaseado = null;
+    let user=req.params.userid;
+    let lan = req.body.lan || req.query.lan  || 'es';
 
+    let old_pass = req.body.old_pass || null;
+    let new_pass = req.body.new_pass || null;
+    let new_pass2 = req.body.new_pass_repeat || null;
+    if (!old_pass || !new_pass || !new_pass2){
+        return res.status(400).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',lan)});
+    }
+    if (new_pass != new_pass2){
+        return res.status(400).json({sucess: false, error:translator('PASSWORDS_NOT_MATCH',lan)});
+    }
+
+    User.findOne({_id: user}, function(error,user){
+       if (error){
+           return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)});
+       }
+       if (!user){
+           return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)});
+       }
+
+       const crypto = require('crypto');
+       const hash = crypto.createHash('sha256');
+
+       passHaseado = hash.update(old_pass).digest('hex');
+
+
+
+       if (passHaseado !== user.password){
+            return res.status(401).json({sucess: false, error: translator('AUTH_FAILED',lan)});
+       }
+
+       if (User.validatePassword(new_pass)==false){
+           return res.status(400).json({sucess:false,error:translator('INVALID_PASSWORD',lan)});
+       }
+       const hash_new = crypto.createHash('sha256');
+
+       passHaseado = hash_new.update(new_pass).digest('hex');
+
+       user.password = passHaseado;
+
+       user.save(function(err,user){
+           if (err){
+               return res.status(400).json({sucess: false, error: translator('WRONG_AUTH_PARAMS',lan)});
+           }
+           return res.status(200).json({sucess: true});
+       })
+
+
+    });
+
+});
 
 module.exports = router;
