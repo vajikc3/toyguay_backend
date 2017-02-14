@@ -3,6 +3,8 @@
  */
 
 'use strict';
+
+
 let jwt = require('jsonwebtoken');
 let jwtAuth = require('../../../lib/jwtAuth');
 
@@ -16,6 +18,8 @@ require('mongoose');
 
 let translator = require('../../../lib/translator');
 
+let nodemailer = require('nodemailer');
+let smtpTransport = require('nodemailer-smtp-transport');
 
 
 
@@ -150,7 +154,32 @@ router.post('/recover',function(req,res){
         if (!user){
             return res.status(400).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
         }
-        return res.status(200).json({sucess: true, error: 'Enviando emil a: '+user.email});
+
+        let transporter = nodemailer.createTransport(smtpTransport({
+            host: 'localhost',
+            port: 25
+        }));
+        let mailOptions = {
+            from: 'no-reply@toyguay.com',
+            to: 'ivan.olea@gmail.com',
+            subject: 'Recuperacion de contraseña',
+            text: 'Recuperando contraseña',
+            html: '<b>Recuperando contraseña</b>'
+        };
+
+        transporter.sendMail(mailOptions,function(error,info){
+            if (error){
+                return res.status(400).json({sucess: false, error: 'Error enviando mail'});
+            }
+            else{
+                return res.status(200).json({sucess: true, error: 'Enviando emil a: '+user.email});
+            }
+        });
+
+
+
+
+
 
     });
 
@@ -159,9 +188,9 @@ router.post('/recover',function(req,res){
 
 
 /* Endpoints that required auth */
-/* LO QuITO PARA PROBAR LA API HAY Q PONERLO
+
 router.use(jwtAuth());
-TODO */
+
 
 router.delete('/:userid',function(req,res){
     console.log('Borrando usuario ->', req.params.userid);
