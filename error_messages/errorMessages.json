@@ -70,5 +70,21 @@
   "FORBIDDEN":{
     "es": "Operación no permitida",
     "en": "Operation not allowed"
+  },
+  "RECOVER":{
+    "es": "Recuperación de contraseña",
+    "en": "Password recover"
+  },
+  "EMAIL":{
+    "es": "Ha solicitado cambiar la contraseña de toyguay, la nueva contraseña es: ",
+    "en": "You have required changing toyguay password, the new one is: "
+  },
+  "EMAIL_OK":{
+    "es": "Una nueva contraseña se ha enviado a: ",
+    "en": "A new password has been sent to: "
+  },
+  "EMAIL_ERROR":{
+    "es": "No se pudo enviar el mail con la nueva contraseña",
+    "en": "Mail with new password could not been sent"
   }
 }

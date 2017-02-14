@@ -21,7 +21,7 @@ let translator = require('../../../lib/translator');
 let nodemailer = require('nodemailer');
 let smtpTransport = require('nodemailer-smtp-transport');
 
-
+let generatePassword = require('password-generator');
 
 
 let User = require('mongoose').model('User');   // Cargamos el usuario
@@ -141,6 +141,10 @@ router.post('/authenticate', function(req, res) {
 
 
 router.post('/recover',function(req,res){
+    let newPass='';
+    let passHash='';
+
+
     let user = req.body.user;
     let email = req.body.email;
     let lan = req.body.lan || req.query.lan  || 'es';
@@ -155,24 +159,39 @@ router.post('/recover',function(req,res){
             return res.status(400).json({sucess: false, error: translator('USER_NOT_FOUND',lan)});
         }
 
+        newPass = generatePassword(15,false);
+        console.log('New generated password -> ', newPass);
+        const crypto = require('crypto');
+        const hash = crypto.createHash('sha256');
+
+        passHash= hash.update(newPass).digest('hex');
+
         let transporter = nodemailer.createTransport(smtpTransport({
             host: 'localhost',
             port: 25
         }));
         let mailOptions = {
             from: 'no-reply@toyguay.com',
-            to: 'ivan.olea@gmail.com',
-            subject: 'Recuperacion de contraseña',
-            text: 'Recuperando contraseña',
-            html: '<b>Recuperando contraseña</b>'
+            to: user.email,
+            subject: translator('RECOVER',lan),
+            text: translator('EMAIL',lan) + newPass,
+
         };
 
         transporter.sendMail(mailOptions,function(error,info){
             if (error){
-                return res.status(400).json({sucess: false, error: 'Error enviando mail'});
+                return res.status(400).json({sucess: false, error: translator('EMAIL_ERROR',lan)});
             }
             else{
-                return res.status(200).json({sucess: true, error: 'Enviando emil a: '+user.email});
+                //
+                user.password = passHash;
+                user.save(function(error,user){
+                   if (error){
+                       return res.status(400).json({sucess: false, error: translator('EMAIL_ERROR',lan)});
+                   }
+                    return res.status(200).json({sucess: true, error: translator('EMAIL_OK',lan) + user.email});
+                });
+
             }
         });
 
