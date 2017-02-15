@@ -17,8 +17,6 @@ Dentro de la gestión de usuarios hay dos operaciones a realizar:
 El modelo de usuario de la base de datos tiene este esquema:
 
 ```
-
-
 let userSchema = mongoose.Schema({
     entity: {type: Number, required: false, default: 0},
     first_name: {type: String, required: true},
@@ -43,7 +41,7 @@ let userSchema = mongoose.Schema({
 userSchema.index({'email':1},{ unique: true});
 userSchema.index({'nick_name':1},{ unique: true});
 userSchema.index({location: '2dsphere'});
-``
+```
 
 
 
