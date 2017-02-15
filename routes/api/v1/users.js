@@ -258,8 +258,6 @@ router.delete('/:userid',function(req,res){
                         // Test decoded data is the user
 
 
-
-
                         User.remove({_id: req.params.userid }, function(err,user){
                             if (err){
                                 return res.status(404).json({sucess : false, error: translator('USER_NOT_FOUND',lan)})
