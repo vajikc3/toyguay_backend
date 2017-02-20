@@ -90,6 +90,8 @@ router.post('/register',function(req,res){
         }
         return res.status(201).json({sucess: true, saved: saved});
 
+
+
     });
 
 
@@ -271,6 +273,35 @@ router.delete('/:userid',function(req,res){
                 });
             }
         }
+
+    });
+});
+
+
+router.get('/:userid',function(req,res){
+   console.log('Info de usuario TODO...no se tiene que ver el password');
+   let user = req.params.userid;
+   let lan = req.body.lan || req.query.lan  || 'es';
+
+   User.findOne({_id: user},function(err,user) {
+       if (err) {
+           return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND', lan)});
+       }
+       if (!user) {
+           return res.status(404).json({sucess: false, error: translator('USER_NOT_FOUND', lan)});
+       }
+       let out_user= {
+           first_name : user.first_name,
+           last_name : user.last_name,
+           email : user.email,
+           nick_name : user.nick_name,
+           location : user.location,
+           city : user.city,
+           province : user.province,
+
+       };
+
+       return res.status(200).json({sucess: true, user: out_user});
 
     });
 });
