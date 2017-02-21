@@ -23,7 +23,7 @@ let adSchema = mongoose.Schema({
 });
 
 adSchema.statics.list = function(filter,start,limit,sort,cb){
-    let query = Ad.find(filter);
+    let query = Toy.find(filter);
     console.log('La query es:',filter);
     query.skip(start);
     query.limit(limit);
@@ -70,4 +70,4 @@ adSchema.statics.precioAFiltro = function(precio){
 
 };
 
-let Ad = mongoose.model('Toy',adSchema);
+let Toy = mongoose.model('Toy',adSchema);

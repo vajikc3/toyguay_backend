@@ -30,7 +30,7 @@ let userSchema = mongoose.Schema({
 
 userSchema.index({'email':1},{ unique: true});
 userSchema.index({'nick_name':1},{ unique: true});
-userSchema.index({location: '2dsphere'});
+userSchema.index({'location': '2dsphere'});
 
 
 userSchema.statics.findUserOrMail = function(usuario, email, callback){
