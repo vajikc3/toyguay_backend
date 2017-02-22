@@ -86,5 +86,9 @@
   "EMAIL_ERROR":{
     "es": "No se pudo enviar el mail con la nueva contraseña",
     "en": "Mail with new password could not been sent"
+  },
+  "TOY_NOT_FOUND":{
+    "es": "El juguete no existe",
+    "en": "Toy does not exist"
   }
 }

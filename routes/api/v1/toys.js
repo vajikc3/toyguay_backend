@@ -9,6 +9,8 @@ let mongoose = require('mongoose');
 
 let translator = require ('../../../lib/translator');
 let jwtAuth = require('../../../lib/jwtAuth');
+let jwt = require('jsonwebtoken');
+let config = require('../../../local_config');
 
 let User = mongoose.model('User');
 
@@ -128,7 +130,60 @@ router.get('/', function(req, res) {
     }
 
 });
+router.get('/:toyid',function(req,res){
+   console.log('Detalle de producto');
+});
 
+
+router.put('/',function(req,res){
+   console.log('Alta de producto');
+});
+
+
+router.delete('/:toyid', function(req, res) {
+    let lan = req.body.lan || req.query.lan  || 'es';
+    let token = req.query.token;
+    let toyid = req.params.toyid;
+    let decoded='';
+
+    console.log('Borrando juguete ->', toyid);
+    console.log('Con el token: ->',token);
+    try {
+        decoded = jwt.verify(token, config.jwt.secret);
+    }catch(err){
+        console.log('Este usuario no existe');
+        return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+    }
+
+    Toy.findOne({_id: toyid},function(err,toy){
+        console.log('Dueño del juguete: ', toy.seller);
+        console.log('Duelo del token:', decoded.id);
+
+        if (err || !toy){
+            return res.status(404).json({sucess: false, error: translator('TOY_NOT_FOUND',lan)});
+        }
+        if (toy.seller != decoded.id){
+            User.findOne({_id: decoded.id},function(err,user){
+                if (err || !user){
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+                if (user.admin!=true){
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+                toy.remove();
+                console.log('Borrando con exito!!!');
+                return res.status(204).json({sucess: true});
+            })
+        }
+        else{
+            toy.remove();
+            console.log('Borrando con exito!!!');
+            return res.status(204).json({sucess: true});
+        }
+    });
+
+
+});
 
 
 module.exports = router;
