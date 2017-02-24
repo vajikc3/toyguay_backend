@@ -94,5 +94,9 @@
   "WRONG_PARAMETERS":{
     "es": "Parámetros erróneos",
     "en": "Wrong parameters"
+  },
+  "WRONG_URL":{
+    "es": "Formato de la URL incorrecta",
+    "en": "Malformed URL"
   }
 }

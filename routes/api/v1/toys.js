@@ -33,7 +33,7 @@ router.get('/', function(req, res) {
 
     let incluirTotal = req.query.incluirTotal || false;
 
-    let idioma = req.query.lan || 'es'; // Si hay idioma se coge, si no por defecto
+    router.post
     //---
     let limit = parseInt(req.query.limit) || 0;
     let start = parseInt(req.query.start) || null;

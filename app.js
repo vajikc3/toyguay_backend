@@ -19,6 +19,7 @@ require('./models/User');
 require('./models/Token');
 
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -38,6 +39,7 @@ app.use('/api/v1/users', require('./routes/api/v1/users'));
 app.use('/api/v1/toys',require('./routes/api/v1/toys'));
 app.use('/images/anuncios',require('./routes/imagenes'));
 app.use('/api/v1/tokens',require('./routes/api/v1/tokens'));
+app.use('/api/v1/images',require('./routes/api/v1/images'));
 
 
 
