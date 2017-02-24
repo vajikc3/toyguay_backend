@@ -130,13 +130,59 @@ router.get('/', function(req, res) {
     }
 
 });
+
 router.get('/:toyid',function(req,res){
-   console.log('Detalle de producto');
+    let lan = req.body.lan || req.query.lan  || 'es';
+    let toyid = req.params.toyid;
+    console.log('Detalle de producto');
+    Toy.findOne({_id: toyid},function(err,toy){
+        if (err || !toy){
+            return res.status(404).json({sucess: false, error: translator('TOY_NOT_FOUND',lan)});
+        }
+        return res.status(200).json({sucess: true, error: toy});
+    });
+
 });
 
 
-router.put('/',function(req,res){
-   console.log('Alta de producto');
+router.post('/',function(req,res){
+   let lan = req.body.lan || req.query.lan  || 'es';
+   let name = req.body.name;
+   let description = req.body.description;
+   let price = req.body.price;
+   let categories = req.body.categories;
+   let token = req.query.token;
+
+   let decoded='';
+
+   try {
+       decoded = jwt.verify(token, config.jwt.secret);
+   }catch(err){
+       console.log('Este usuario no existe');
+       return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+   }
+
+   let toy = new Toy({
+           name: name,
+           description: description,
+           state: 'selling',
+           price: price,
+           seller: decoded.id,
+           categories: Toy.categoriesToArray(categories)
+       }
+   );
+   toy.save(function(err,toy){
+       if (err || !toy){
+           /* TODO
+           Tema de las notificaciones con las busquedas
+            */
+           return res.status(400).json({sucess: false, error: translator('WRONG_PARAMETERS',lan)});
+       }
+       else{
+           return res.status(201).json({sucess:true, toy: toy});
+       }
+   });
+
 });
 
 

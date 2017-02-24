@@ -90,5 +90,9 @@
   "TOY_NOT_FOUND":{
     "es": "El juguete no existe",
     "en": "Toy does not exist"
+  },
+  "WRONG_PARAMETERS":{
+    "es": "Parámetros erróneos",
+    "en": "Wrong parameters"
   }
 }

@@ -27,7 +27,8 @@ adSchema.statics.list = function(filter,start,limit,sort,cb){
     console.log('La query es:',filter);
     query.skip(start);
     query.limit(limit);
-    query.sort(sort);
+    query.sort([[sort,-1]]);
+
     return query.exec(cb);
 };
 
@@ -40,6 +41,12 @@ adSchema.statics.tagsAFiltro = function(tag){
         return {$in: tag};
     }
     return tag;
+};
+
+adSchema.statics.categoriesToArray = function(parameter){
+  var arr = [];
+  arr = parameter.split(',');
+  return arr;
 };
 
 /* Funcion que convierte criterio de busqueda de precio a formato de mongo */
