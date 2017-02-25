@@ -36,10 +36,13 @@ router.post('/register',function(req,res){
     let nick_name = req.body.user;
     let password = req.body.password;
     let password_repeat = req.body.password_repeat;
-    let latitude = req.body.latitude;
-    let longitude = req.body.longitude;
+    let latitude = parseFloat(req.body.latitude) || null;
+    let longitude = parseFloat(req.body.longitude) || null;
     let imageURL = req.body.imageURL;
     let state = req.body.state;
+    let city = req.body.city;
+    let province = req.body.province;
+    let country = req.body.country;
 
 
     let lan = req.body.lan || req.query.lan  || 'es';
@@ -64,6 +67,21 @@ router.post('/register',function(req,res){
         return res.status(400).json({sucess:false,error:translator('INVALID_PASSWORD',lan)});
     }
 
+    let location;
+
+    if (latitude==null || longitude==null){
+        location=null;
+    }
+    else{
+        location = {
+            location: {
+                type: 'Point',
+                coordinates : [latitude,longitude]
+            }
+        }
+
+    }
+
     let usuario = new User(
         {
             first_name: first_name,
@@ -71,12 +89,10 @@ router.post('/register',function(req,res){
             email: email,
             nick_name: nick_name,
             password: hashPas,
-            location: {
-                $geometry : {
-                    type: 'Point',
-                    coordinates : [latitude,longitude]
-                }
-            },
+            location: location,
+            city: city,
+            province: province,
+            country: country,
             state: state,
             imageURL: imageURL
         }
@@ -84,9 +100,9 @@ router.post('/register',function(req,res){
 
 
     usuario.save(function(err,saved){
-        if (err){
+        if (err || !saved){
             console.log('Error insertando usuario ->', err);
-            return res.status(400).json({sucess: false, error:translator('REGISTER_ERROR',idioma)});
+            return res.status(400).json({sucess: false, error:translator('REGISTER_ERROR',lan)});
         }
         return res.status(201).json({sucess: true, saved: saved});
 
