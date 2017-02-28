@@ -98,5 +98,9 @@
   "WRONG_URL":{
     "es": "Formato de la URL incorrecta",
     "en": "Malformed URL"
+  },
+  "SEARCH_ERROR":{
+    "es": "Parámetros de búsqueda erróneos",
+    "en": "Wrong search parameters"
   }
 }

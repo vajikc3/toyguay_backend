@@ -17,6 +17,8 @@ require('./lib/connectMongoose');
 require('./models/Toy'); // Modelo de anuncios
 require('./models/User');
 require('./models/Token');
+require('./models/Search');
+
 
 
 
@@ -40,6 +42,7 @@ app.use('/api/v1/toys',require('./routes/api/v1/toys'));
 app.use('/images/anuncios',require('./routes/imagenes'));
 app.use('/api/v1/tokens',require('./routes/api/v1/tokens'));
 app.use('/api/v1/images',require('./routes/api/v1/images'));
+app.use('/api/v1/searches',require('./routes/api/v1/searches'));
 
 
 

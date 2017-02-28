@@ -33,7 +33,7 @@ router.get('/', function(req, res) {
 
     let incluirTotal = req.query.incluirTotal || false;
 
-    router.post
+
     //---
     let limit = parseInt(req.query.limit) || 0;
     let start = parseInt(req.query.start) || null;
@@ -85,8 +85,6 @@ router.get('/', function(req, res) {
 
             let arr=[]
             for(var i in users) {
-                console.log('LA PUTA i vale: ', i);
-                console.log('EL VALOR ES: ', users[i]['_id']);
                 arr.push(users[i]['_id']);
             }
             console.log('Y el array final es: ', arr);
@@ -104,13 +102,13 @@ router.get('/', function(req, res) {
                     }
                     console.log('Se quiere incluir total', incluirTotal);
 
-                    return res.json({sucess: true, total: rows.length, rows: rows});
+                    return res.status(200).json({sucess: true, total: rows.length, rows: rows});
 
                 });
             })
             .catch(function(err){
                 // just need one of these
-                return res.json({sucess: false,  error: err});
+                return res.status(200).json({sucess: false,  error: err});
             });
 
     }
@@ -124,7 +122,7 @@ router.get('/', function(req, res) {
             }
             console.log('Se quiere incluir total', incluirTotal);
 
-            return res.json({sucess: true, total: rows.length, rows: rows});
+            return res.status(200).json({sucess: true, total: rows.length, rows: rows});
 
         });
     }
