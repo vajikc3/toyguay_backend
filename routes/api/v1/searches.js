@@ -81,6 +81,50 @@ router.get('/',function(req,res){
 
 });
 
+router.delete('/:searchid',function(req,res){
+    let lan = req.body.lan || req.query.lan  || 'es';
+    let token = req.query.token;
+    let searchId = req.params.searchid;
+    let decoded='';
 
+    console.log('Borrando busqueda ->', searchId);
+    console.log('Con el token: ->',token);
+
+    try {
+        decoded = jwt.verify(token, config.jwt.secret);
+    }catch(err){
+        console.log('Este usuario no existe');
+        return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+    }
+
+    Search.findOne({_id: searchId},function(err,search){
+       if (err || !search){
+           console.log('Error en busqueda:',err);
+           console.log('Search devuelto: ', search);
+           return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+       }
+       console.log('Borrando search de usuario:', searchId.seller);
+       if (searchId.seller != decoded.id){
+            User.findOne({_id: decoded.id},function(err,user){
+                if (err || !user){
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+                if (user.admin!=true){
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+                search.remove();
+                console.log('Borrando con exito!!!');
+                return res.status(204).json({sucess: true});
+            })
+       }
+       else{
+           search.remove();
+           console.log('Borrando con exito!!!');
+           return res.status(204).json({sucess: true});
+       }
+    });
+
+
+});
 
 module.exports = router;
