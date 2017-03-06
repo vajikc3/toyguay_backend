@@ -102,5 +102,13 @@
   "SEARCH_ERROR":{
     "es": "Parámetros de búsqueda erróneos",
     "en": "Wrong search parameters"
+  },
+  "TRANSACTION_ERROR":{
+    "es": "Error en transacción, parámetros erróneos",
+    "en": "Wrong parameters in transaction"
+  },
+  "TRANSACTION_NOT_FOUND":{
+    "es": "La transacción no existe",
+    "en": "Transaction not found"
   }
 }

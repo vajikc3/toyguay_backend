@@ -18,6 +18,7 @@ require('./models/Toy'); // Modelo de anuncios
 require('./models/User');
 require('./models/Token');
 require('./models/Search');
+require('./models/Transaction');
 
 
 
@@ -39,10 +40,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', require('./routes/index'));
 app.use('/api/v1/users', require('./routes/api/v1/users'));
 app.use('/api/v1/toys',require('./routes/api/v1/toys'));
-app.use('/images/anuncios',require('./routes/imagenes'));
+//app.use('/images/anuncios',require('./routes/imagenes'));
 app.use('/api/v1/tokens',require('./routes/api/v1/tokens'));
 app.use('/api/v1/images',require('./routes/api/v1/images'));
 app.use('/api/v1/searches',require('./routes/api/v1/searches'));
+app.use('/api/v1/transactions',require('./routes/api/v1/transactions'));
+
 
 
 
