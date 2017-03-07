@@ -18,8 +18,7 @@ let Toy = mongoose.model('Toy');
 
 //-- Requerimos autentificacion para todo
 
-/* Esto hay que ponerlo cuando se necesite autorizacion */
-router.use(jwtAuth());
+
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -128,6 +127,9 @@ router.get('/', function(req, res) {
     }
 
 });
+
+/* Esto hay que ponerlo cuando se necesite autorizacion */
+router.use(jwtAuth());
 
 router.get('/:toyid',function(req,res){
     let lan = req.body.lan || req.query.lan  || 'es';

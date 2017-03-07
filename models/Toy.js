@@ -28,7 +28,7 @@ adSchema.statics.list = function(filter,start,limit,sort,cb){
     query.skip(start);
     query.limit(limit);
     query.sort([[sort,-1]]);
-
+    query.populate('seller','-password');
     return query.exec(cb);
 };
 
