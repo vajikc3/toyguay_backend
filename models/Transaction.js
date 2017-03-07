@@ -19,6 +19,7 @@ transactionSchema.statics.list = function(filter,start,limit,sort,cb){
     query.skip(start);
     query.limit(limit);
     query.sort([[sort,-1]]);
+    query.populate('toy');
     return query.exec(cb);
 };
 

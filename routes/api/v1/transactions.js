@@ -127,13 +127,27 @@ router.get('/:transactionId',function(req,res){
 
 
     Transaction.findOne({_id: transactionId},function(err,data){
-        if (err || !data){
+        if (err){
             return res.status(400).json({sucess: false, error: translator('TRANSACTION_NOT_FOUND',lan)});
         }
-        if (data.buyer === decoded.id || data.seller === decoded.id || decoded.admin ===true){
+        console.log('Comprador:',data.buyer,'Vendedor:',data.seller,'Admin:',decoded.id);
+        if (data.buyer == decoded.id || data.seller == decoded.id){
             return res.status(200).json({sucess: true, row: data});
+        }else{
+            console.log('No pertenece al usuario');
+            User.findOne({_id: decoded.id},function(err,usr){
+                if (err){
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+                if (usr.admin == true){
+                    return res.status(200).json({sucess: true, row: data});
+                }else{
+                    return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
+                }
+            });
+
         }
-    });
+    }).populate('toy');
 
 
 });
