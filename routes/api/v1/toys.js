@@ -22,6 +22,7 @@ let Toy = mongoose.model('Toy');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
+    let lan = req.body.lan || req.query.lan  || 'es';
     let tag = req.query.tag;
     let category = req.query.category;
     let seller = req.query.seller;
@@ -97,7 +98,7 @@ router.get('/', function(req, res) {
                 Toy.list(criteria, start, limit, 'updatedAt', function (err, rows) {
                     if (err) {
                         console.log('Error en listado:', err);
-                        return res.json({sucess: false, error: translator('WRONG_QUERY', idioma)});
+                        return res.json({sucess: false, error: translator('WRONG_QUERY', lan)});
                     }
                     console.log('Se quiere incluir total', incluirTotal);
 

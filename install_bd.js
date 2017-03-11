@@ -7,12 +7,15 @@ require('./lib/connectMongoose');
 require('./models/User');
 require('./models/Toy');
 require('./models/Token');
+require('./models/Category');
 
 
 
 let User = require('mongoose').model('User');
 let Toy = require('mongoose').model('Toy');
 let Token = require('mongoose').model('Token');
+let Category = require('mongoose').model('Category');
+
 
 let user = new User({first_name:'Bardal',
     last_name:'Bardal',
@@ -124,6 +127,9 @@ User.remove({},function(err){
 function rellenaBBDD(cb){
 
     console.log('Filling bbdd with data...');
+
+    creaCategorias();
+
     user.save(function(err,reg){
         if (err){
             console.log('Error !!! ',err);
@@ -159,6 +165,9 @@ function rellenaJuguetes(cb){
     }
 }
 */
+
+
+
 function rellenaJuguetes(cb){
 
     juguete1.save(function (err,reg) {
@@ -194,13 +203,29 @@ function rellenaJuguetes(cb){
         });
 
     });
-
-
-
-
-
 }
 
+function creaCategorias()
+{
+    Category.remove({},function(err){
+        if (err){
+            console.log('Error borrando las categorias');
+            return;
+        }
+        let cat1= new Category({name: 'sports',name_es:'deporte',name_en:'sports'});
+        let cat2= new Category({name: 'dolls',name_es:'muñecas',name_en:'dolls'});
+        let cat3= new Category({name: 'kids',name_es:'niñ@s',name_en:'kids'});
+        let cat4= new Category({name: 'builds',name_es:'construcciones',name_en:'builds'});
+        let cat5= new Category({name: 'home',name_es:'casa',name_en:'home'});
+        cat1.save();
+        cat2.save();
+        cat3.save();
+        cat4.save();
+        cat5.save();
+
+
+    })
+}
 
 
 
