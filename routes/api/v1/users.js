@@ -75,7 +75,7 @@ router.post('/register',function(req,res){
     else{
         location = {
                 type: 'Point',
-                coordinates : [latitude,longitude]
+                coordinates : [longitude, longitude]
             }
 
 
