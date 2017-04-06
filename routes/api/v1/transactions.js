@@ -101,8 +101,8 @@ router.post('/',function(req,res){
                     port: 25
                 }));
                 let mailOptions = {
-                    from: 'no-reply@toyguay.com',
-                    to: user.email,
+                    from: buyer.email,
+                    to: seller.email,
                     subject: translator('RECOVER', lan),
                     text: translator('EMAIL', lan) + newPass,
 
