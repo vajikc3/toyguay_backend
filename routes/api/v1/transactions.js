@@ -110,8 +110,19 @@ router.post('/',function(req,res){
 
                 transporter.sendMail(mailOptions, function (error, info) {
 
+                    if (error){
+                        return res.status(400).json({sucess: false, error: translator('EMAIL_ERROR',lan)});
+                    }
+                    else{
+                        console.log('Info: '+ info);
+                        return res.status(201).json({sucess: true});
 
-                    return res.status(201).json({sucess: true});
+                    }
+
+
+
+
+
                 });
             });
 
