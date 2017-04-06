@@ -88,36 +88,22 @@ router.post('/',function(req,res){
 
                         transporter.sendMail(mailOptions, function (error, info) {
 
+                            if (error){
+                                return res.status(400).json({sucess: false, error: translator('EMAIL_ERROR',lan)});
+                            }
+                            else{
+                                console.log('Info: '+ info);
+                                return res.status(201).json({sucess: true});
 
-                            return res.status(201).json({sucess: true});
+                            }
+
                         });
-                    });
 
                 });
 
 
-                let transporter = nodemailer.createTransport(smtpTransport({
-                    host: 'localhost',
-                    port: 25
-                }));
-                let mailOptions = {
-                    from: buyer.email,
-                    to: seller.email,
-                    subject: translator('NEGOCIO', lan),
-                    text: translator('TRANSACTION_EMAIL', lan) + toy.name
 
-                };
 
-                transporter.sendMail(mailOptions, function (error, info) {
-
-                    if (error){
-                        return res.status(400).json({sucess: false, error: translator('EMAIL_ERROR',lan)});
-                    }
-                    else{
-                        console.log('Info: '+ info);
-                        return res.status(201).json({sucess: true});
-
-                    }
 
 
 
