@@ -14,7 +14,8 @@ let Search = mongoose.model('Search');
 let Transaction = mongoose.model('Transaction');
 let Toy = mongoose.model('Toy');
 
-
+let nodemailer = require('nodemailer');
+let smtpTransport = require('nodemailer-smtp-transport');
 
 /* Esto hay que ponerlo cuando se necesite autorizacion */
 router.use(jwtAuth());
@@ -37,30 +38,85 @@ router.post('/',function(req,res){
         return res.status(403).json({sucess: false, error: translator('FORBIDDEN',lan)});
     }
 
-    Toy.findOne({_id: toy},function(err,data){
-       if (err || !data){
-           return res.status(400).json({sucess: false, error: translator('TOY_NOT_FOUND',lan)});
-       }
-       buyer = decoded.id;
-       seller = data.seller;
-       console.log('Comprador: ',buyer,'Vendedor: ',seller);
-       let tran = new Transaction({
-           toy: toy,
-           seller: seller,
-           buyer: buyer,
-           type: type,
-       });
-       tran.save(function(err,data){
-           if (err || !data){
-               return res.status(400).json({sucess: false, error: translator('TRANSACTION_ERROR',lan)});
-           }
-           return res.status(201).json({sucess: true});
-       });
+    Toy.findOne({_id: toy},function(err,data) {
+        if (err || !data) {
+            return res.status(400).json({sucess: false, error: translator('TOY_NOT_FOUND', lan)});
+        }
+        buyer = decoded.id;
+        seller = data.seller;
+        console.log('Comprador: ', buyer, 'Vendedor: ', seller);
+        let tran = new Transaction({
+            toy: toy,
+            seller: seller,
+            buyer: buyer,
+            type: type,
+        });
+
+        data.state = 'sold';
+        data.save(function (err, data) {
+            if (err) {
+                return res.status(400).json({sucess: false, error: translator('TRANSACTION_ERROR', lan)});
+            }
+            console.log('Updated toy state to SOLD');
+
+            tran.save(function (err, data) {
+                if (err || !data) {
+                    return res.status(400).json({sucess: false, error: translator('TRANSACTION_ERROR', lan)});
+                }
+
+                /* Send email */
+
+                User.findOne({_id: seller}, function (err, sellerData) {
+                    if (err) {
+                        return res.status(400).json({sucess: false, error: translator('TRANSACTION_ERROR', lan)});
+                    }
+                    User.findOne({_id: buyer}, function (err, buyerData) {
+                        if (err) {
+                            return res.status(400).json({sucess: false, error: translator('TRANSACTION_ERROR', lan)});
+                        }
+                        let transporter = nodemailer.createTransport(smtpTransport({
+                            host: 'localhost',
+                            port: 25
+                        }));
+                        let mailOptions = {
+                            from: buyerData.email,
+                            to: sellerData.email,
+                            subject: translator('NEGOCIO', lan),
+                            text: translator('TRANSACTION_EMAIL', lan) + toy.name + ": " + toy.description
+
+                        };
+
+                        transporter.sendMail(mailOptions, function (error, info) {
 
 
+                            return res.status(201).json({sucess: true});
+                        });
+                    });
+
+                });
+
+
+                let transporter = nodemailer.createTransport(smtpTransport({
+                    host: 'localhost',
+                    port: 25
+                }));
+                let mailOptions = {
+                    from: 'no-reply@toyguay.com',
+                    to: user.email,
+                    subject: translator('RECOVER', lan),
+                    text: translator('EMAIL', lan) + newPass,
+
+                };
+
+                transporter.sendMail(mailOptions, function (error, info) {
+
+
+                    return res.status(201).json({sucess: true});
+                });
+            });
+
+        });
     });
-
-
 });
 
 router.get('/',function(req,res){
