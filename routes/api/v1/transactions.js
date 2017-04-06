@@ -103,8 +103,8 @@ router.post('/',function(req,res){
                 let mailOptions = {
                     from: buyer.email,
                     to: seller.email,
-                    subject: translator('RECOVER', lan),
-                    text: translator('EMAIL', lan) + newPass,
+                    subject: translator('NEGOCIO', lan),
+                    text: translator('TRANSACTION_EMAIL', lan) + toy.name
 
                 };
 
