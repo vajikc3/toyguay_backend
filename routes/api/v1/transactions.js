@@ -82,7 +82,7 @@ router.post('/',function(req,res){
                             from: buyerData.email,
                             to: sellerData.email,
                             subject: translator('NEGOCIO', lan),
-                            text: translator('TRANSACTION_EMAIL', lan) + toy.name + ": " + toy.description
+                            text: translator('TRANSACTION_EMAIL', lan) + data.name + ": " + data.description
 
                         };
 
@@ -99,16 +99,7 @@ router.post('/',function(req,res){
 
                         });
 
-                });
-
-
-
-
-
-
-
-
-
+                    });
                 });
             });
 
